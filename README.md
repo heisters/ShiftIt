@@ -13,7 +13,13 @@ License: [GNU General Public License v3][5]
 About this Fork
 ---------------
 
-This fork adds a nifty little feature: shifting windows to the left or right now toggles through 3 different window widths: 1/2 screen width, 1/3 screen width and 2/3 screen width.  Also, shifting windows to the top/bottom toggles through 2 widths: full width and 1/3 width.  I've found that this allows for far better screen width utilization on widescreen machines and enables rapidly tiling windows into thirds.
+This fork adds a few nifty little features.
+
+- Shifting windows to the left, right, or one of the corners now toggles through 3 different window widths: 1/2 screen width, 1/3 screen width and 2/3 screen width.
+- Shifting windows to the top/bottom toggles through 2 widths: full width and 1/3 width.
+- Shifting windows to the center cycles through 2 sizes: 85% of the screen width/height and 60% of the screen width/height.
+
+I've found that adding these toggles allows for far better screen width utilization on widescreen machines and enables rapidly tiling windows into thirds.
 
 Requirements
 ------------
