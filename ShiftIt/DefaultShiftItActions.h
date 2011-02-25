@@ -19,13 +19,15 @@
 
 #import <Foundation/Foundation.h>
 
-NSRect ShiftIt_Left(NSSize screenSize, NSRect windowRect);
-NSRect ShiftIt_Right(NSSize screenSize, NSRect windowRect);
-NSRect ShiftIt_Top(NSSize screenSize, NSRect windowRect);
-NSRect ShiftIt_Bottom(NSSize screenSize, NSRect windowRect);
-NSRect ShiftIt_TopLeft(NSSize screenSize, NSRect windowRect);
-NSRect ShiftIt_TopRight(NSSize screenSize, NSRect windowRect);
-NSRect ShiftIt_BottomLeft(NSSize screenSize, NSRect windowRect);
-NSRect ShiftIt_BottomRight(NSSize screenSize, NSRect windowRect);
-NSRect ShiftIt_FullScreen(NSSize screenSize, NSRect windowRect);
-NSRect ShiftIt_Center(NSSize screenSize, NSRect windowRect);
+BOOL CloseTo(float a, float b);
+
+NSRect ShiftIt_Left(NSRect screenRect, NSRect windowRect);
+NSRect ShiftIt_Right(NSRect screenRect, NSRect windowRect);
+NSRect ShiftIt_Top(NSRect screenRect, NSRect windowRect);
+NSRect ShiftIt_Bottom(NSRect screenRect, NSRect windowRect);
+NSRect ShiftIt_TopLeft(NSRect screenRect, NSRect windowRect);
+NSRect ShiftIt_TopRight(NSRect screenRect, NSRect windowRect);
+NSRect ShiftIt_BottomLeft(NSRect screenRect, NSRect windowRect);
+NSRect ShiftIt_BottomRight(NSRect screenRect, NSRect windowRect);
+NSRect ShiftIt_FullScreen(NSRect screenRect, NSRect windowRect);
+NSRect ShiftIt_Center(NSRect screenRect, NSRect windowRect);

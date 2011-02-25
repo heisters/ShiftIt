@@ -10,6 +10,11 @@ It is a fork from the original [ShiftIt][1] by [Aravindkumar Rajendiran][2] whic
 
 License: [GNU General Public License v3][5]
 
+About this Fork
+---------------
+
+This fork adds a nifty little feature: shifting windows to the left or right now toggles through 3 different window widths: 1/2 screen width, 1/3 screen width and 2/3 screen width.  Also, shifting windows to the top/bottom toggles through 2 widths: full width and 1/3 width.  I've found that this allows for far better screen width utilization on widescreen machines and enables rapidly tiling windows into thirds.
+
 Requirements
 ------------
 

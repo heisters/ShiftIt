@@ -203,7 +203,7 @@ SINGLETON_BOILERPLATE(WindowSizer, sharedWindowSize);
 
 	// execute shift it action to reposition the application window
 	ShiftItFunctionRef actionFunction = [action action];
-	NSRect shiftedRect = actionFunction(visibleScreenRect.size, windowRect);
+	NSRect shiftedRect = actionFunction(visibleScreenRect, windowRect);
 	FMTDevLog(@"shifted window rect: %@", RECT_STR(shiftedRect));
 	 
 	// readjust adjust the visibility

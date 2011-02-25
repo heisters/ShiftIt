@@ -20,121 +20,241 @@
 #import "DefaultShiftItActions.h"
 #import "FMTDefines.h"
 
-NSRect ShiftIt_Left(NSSize screenSize, NSRect windowRect) {
+BOOL CloseTo(float a, float b) {
+	return fabs(a - b) < 20;
+}
+
+NSRect ShiftIt_Left(NSRect screenRect, NSRect windowRect) {
 	NSRect r;
 	
 	r.origin.x = 0;
 	r.origin.y = 0;
 	
-	r.size.width = screenSize.width / 2;
-	r.size.height = screenSize.height;
+	r.size.width = screenRect.size.width / 2;
+	r.size.height = screenRect.size.height;
+	
+	float w = windowRect.size.width;
+	float h = windowRect.size.height;
+	float x = windowRect.origin.x;
+	float sw = screenRect.size.width;
+
+	if (windowRect.origin.y == screenRect.origin.y && CloseTo(x, 0) && CloseTo(h, r.size.height)) {
+		if (CloseTo(w, sw / 2)) {
+			r.size.width = floor(sw / 3.0);
+		} else if (CloseTo(w, floor(sw / 3.0))) {
+			r.size.width = floor(sw * 2.0 / 3.0);
+		}		
+	}
 	
 	return r;
 }
 
-NSRect ShiftIt_Right(NSSize screenSize, NSRect windowRect) {
+NSRect ShiftIt_Right(NSRect screenRect, NSRect windowRect) {
 	NSRect r;
 	
-	r.origin.x = screenSize.width/2;
 	r.origin.y = 0;
 	
-	r.size.width = screenSize.width / 2;
-	r.size.height = screenSize.height;
+	r.size.width = screenRect.size.width / 2;
+	r.size.height = screenRect.size.height;
+	
+	float w = windowRect.size.width;
+	float h = windowRect.size.height;
+	float x = windowRect.origin.x;
+	float sw = screenRect.size.width;
+
+	if (CloseTo(windowRect.origin.y, screenRect.origin.y) && CloseTo(x, sw - w) && CloseTo(h, r.size.height)) {
+		if (CloseTo(w, sw / 2)) {
+			r.size.width = floor(sw / 3.0);
+		} else if (CloseTo(w, floor(sw / 3.0))) {
+			r.size.width = floor(sw * 2.0 / 3.0);
+		}
+	}
+	
+	r.origin.x = screenRect.size.width - r.size.width;
 
 	return r;
 }
 
-NSRect ShiftIt_Top(NSSize screenSize, NSRect windowRect) {
+NSRect ShiftIt_Top(NSRect screenRect, NSRect windowRect) {
+	NSRect r;
+	
+	r.origin.y = 0;
+	
+	r.size.width = screenRect.size.width;
+	r.size.height = screenRect.size.height / 2;
+	
+	float w = windowRect.size.width;
+	float h = windowRect.size.height;
+	float x = windowRect.origin.x;
+	float sw = screenRect.size.width;
+	
+	if (CloseTo(windowRect.origin.y, screenRect.origin.y) && CloseTo(x, floor((sw - w) / 2)) && CloseTo(h, r.size.height)) {
+		if (CloseTo(w, screenRect.size.width)) {
+			r.size.width = floor(screenRect.size.width / 3.0);
+		}
+	}
+	
+	r.origin.x = floor((screenRect.size.width - r.size.width) / 2);
+	
+	return r;
+}
+
+NSRect ShiftIt_Bottom(NSRect screenRect, NSRect windowRect) {
+	NSRect r;
+	
+	r.origin.y = screenRect.size.height / 2;
+	
+	r.size.width = screenRect.size.width;
+	r.size.height = screenRect.size.height / 2;
+
+	float w = windowRect.size.width;
+	float h = windowRect.size.height;
+	float x = windowRect.origin.x;
+	float sw = screenRect.size.width;
+	
+	if (CloseTo(windowRect.origin.y, screenRect.origin.y + screenRect.size.height / 2) && CloseTo(x, floor((sw - w) / 2)) && CloseTo(h, r.size.height)) {
+		if (CloseTo(w,screenRect.size.width)) {
+			r.size.width = floor(screenRect.size.width / 3.0);
+		}
+	}
+	
+	r.origin.x = floor((screenRect.size.width - r.size.width) / 2);
+	
+	return r;
+}
+
+NSRect ShiftIt_TopLeft(NSRect screenRect, NSRect windowRect) {
 	NSRect r;
 	
 	r.origin.x = 0;
 	r.origin.y = 0;
 	
-	r.size.width = screenSize.width;
-	r.size.height = screenSize.height / 2;
+	r.size.width = screenRect.size.width / 2;
+	r.size.height = screenRect.size.height / 2;
+	
+	float w = windowRect.size.width;
+	float h = windowRect.size.height;
+	float x = windowRect.origin.x;
+	float sw = screenRect.size.width;
+	
+	if (CloseTo(windowRect.origin.y, screenRect.origin.y) && CloseTo(x, 0) && CloseTo(h, r.size.height)) {
+		if (CloseTo(w, sw/2)) {
+			r.size.width = floor(sw / 3.0);
+		} else if (CloseTo(w, floor(sw / 3.0))) {
+			r.size.width = floor(sw * 2.0 / 3.0);
+		}
+	}
+	
 	
 	return r;
 }
 
-NSRect ShiftIt_Bottom(NSSize screenSize, NSRect windowRect) {
+NSRect ShiftIt_TopRight(NSRect screenRect, NSRect windowRect) {
+	NSRect r;
+	
+	r.origin.y = 0;
+	
+	r.size.width = screenRect.size.width / 2;
+	r.size.height = screenRect.size.height / 2;
+	
+	float w = windowRect.size.width;
+	float h = windowRect.size.height;
+	float x = windowRect.origin.x;
+	float sw = screenRect.size.width;
+	
+	if (CloseTo(windowRect.origin.y, screenRect.origin.y) && CloseTo(x, sw - w) && CloseTo(h, r.size.height)) {
+		if (CloseTo(w, sw / 2)) {
+			r.size.width = floor(sw / 3.0);
+		} else if (CloseTo(w, floor(sw / 3.0))) {
+			r.size.width = floor(sw * 2.0 / 3.0);
+		}
+	}
+	
+	r.origin.x = screenRect.size.width - r.size.width;	
+	
+	return r;
+}
+
+NSRect ShiftIt_BottomLeft(NSRect screenRect, NSRect windowRect) {
 	NSRect r;
 	
 	r.origin.x = 0;
-	r.origin.y = screenSize.height / 2;
+	r.origin.y = screenRect.size.height / 2;
 	
-	r.size.width = screenSize.width;
-	r.size.height = screenSize.height / 2;
+	r.size.width = screenRect.size.width / 2;
+	r.size.height = screenRect.size.height / 2;
+	
+	float w = windowRect.size.width;
+	float h = windowRect.size.height;
+	float x = windowRect.origin.x;
+	float sw = screenRect.size.width;
+	
+	if (CloseTo(windowRect.origin.y, screenRect.origin.y + screenRect.size.height / 2) && CloseTo(x, 0) && CloseTo(h, r.size.height)) {
+		if (CloseTo(w, sw / 2)) {
+			r.size.width = floor(sw / 3.0);
+		} else if (CloseTo(w, floor(sw / 3.0))) {
+			r.size.width = floor(sw * 2.0 / 3.0);
+		}
+	}
 	
 	return r;
 }
 
-NSRect ShiftIt_TopLeft(NSSize screenSize, NSRect windowRect) {
+NSRect ShiftIt_BottomRight(NSRect screenRect, NSRect windowRect) {
+	NSRect r;
+	
+	r.origin.y = screenRect.size.height / 2;
+	
+	r.size.width = screenRect.size.width / 2;
+	r.size.height = screenRect.size.height / 2;
+	
+	float w = windowRect.size.width;
+	float h = windowRect.size.height;
+	float x = windowRect.origin.x;
+	float sw = screenRect.size.width;
+	
+	if (CloseTo(windowRect.origin.y, screenRect.origin.y + screenRect.size.height / 2) && CloseTo(x, sw - w) && CloseTo(h, r.size.height)) {
+		if (CloseTo(w, sw / 2)) {
+			r.size.width = floor(sw / 3.0);
+		} else if (CloseTo(w, floor(sw / 3.0))) {
+			r.size.width = floor(sw * 2.0 / 3.0);
+		}
+	}
+	
+	r.origin.x = screenRect.size.width - r.size.width;	
+	
+	return r;
+}
+
+NSRect ShiftIt_FullScreen(NSRect screenRect, NSRect windowRect) {
 	NSRect r;
 	
 	r.origin.x = 0;
 	r.origin.y = 0;
 	
-	r.size.width = screenSize.width / 2;
-	r.size.height = screenSize.height / 2;
+	r.size.width = screenRect.size.width;
+	r.size.height = screenRect.size.height;
 	
 	return r;
 }
 
-NSRect ShiftIt_TopRight(NSSize screenSize, NSRect windowRect) {
+NSRect ShiftIt_Center(NSRect screenRect, NSRect windowRect) {
 	NSRect r;
 	
-	r.origin.x = screenSize.width / 2;
-	r.origin.y = 0;
+	float w = floor(screenRect.size.width * 0.85);
+	float h = floor(screenRect.size.height * 0.85);
 	
-	r.size.width = screenSize.width / 2;
-	r.size.height = screenSize.height / 2;
-	
-	return r;
-}
+	if (CloseTo(w, windowRect.size.width) && CloseTo(h, windowRect.size.height)) {
+		w = floor(screenRect.size.width * 0.6);
+		h = floor(screenRect.size.height * 0.6);
+	}
 
-NSRect ShiftIt_BottomLeft(NSSize screenSize, NSRect windowRect) {
-	NSRect r;
 	
-	r.origin.x = 0;
-	r.origin.y = screenSize.height / 2;
+	r.origin.x = (screenRect.size.width / 2) - (w / 2);
+	r.origin.y = (screenRect.size.height / 2) - (h / 2);	
 	
-	r.size.width = screenSize.width / 2;
-	r.size.height = screenSize.height / 2;
-	
-	return r;
-}
-
-NSRect ShiftIt_BottomRight(NSSize screenSize, NSRect windowRect) {
-	NSRect r;
-	
-	r.origin.x = screenSize.width / 2;
-	r.origin.y = screenSize.height / 2;
-	
-	r.size.width = screenSize.width / 2;
-	r.size.height = screenSize.height / 2;
-	
-	return r;
-}
-
-NSRect ShiftIt_FullScreen(NSSize screenSize, NSRect windowRect) {
-	NSRect r;
-	
-	r.origin.x = 0;
-	r.origin.y = 0;
-	
-	r.size.width = screenSize.width;
-	r.size.height = screenSize.height;
-	
-	return r;
-}
-
-NSRect ShiftIt_Center(NSSize screenSize, NSRect windowRect) {
-	NSRect r;
-	
-	r.origin.x = (screenSize.width / 2)-(windowRect.size.width / 2);
-	r.origin.y = (screenSize.height / 2)-(windowRect.size.height / 2);	
-	
-	r.size = windowRect.size;
+	r.size.width = w;
+	r.size.height = h;
 	
 	return r;
 }
