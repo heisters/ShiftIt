@@ -24,6 +24,10 @@ BOOL CloseTo(float a, float b) {
 	return fabs(a - b) < 20;
 }
 
+BOOL Wide(NSRect screenRect) {
+	return screenRect.size.width >= screenRect.size.height;
+}
+
 NSRect ShiftIt_Left(NSRect screenRect, NSRect windowRect) {
 	NSRect r;
 	
@@ -36,13 +40,26 @@ NSRect ShiftIt_Left(NSRect screenRect, NSRect windowRect) {
 	float w = windowRect.size.width;
 	float h = windowRect.size.height;
 	float x = windowRect.origin.x;
+	float y = windowRect.origin.y;
 	float sw = screenRect.size.width;
-
-	if (windowRect.origin.y == screenRect.origin.y && CloseTo(x, 0) && CloseTo(h, r.size.height)) {
-		if (CloseTo(w, sw / 2)) {
-			r.size.width = floor(sw / 3.0);
-		} else if (CloseTo(w, floor(sw / 3.0))) {
-			r.size.width = floor(sw * 2.0 / 3.0);
+	float sh = screenRect.size.height;
+	float sx = screenRect.origin.x;
+	float sy = screenRect.origin.y;
+	
+	if (Wide(screenRect)) {
+		if (CloseTo(y, sy) && CloseTo(x, sx) && CloseTo(h, sh)) {
+			if (CloseTo(w, sw / 2)) {
+				r.size.width = floor(sw / 3.0);
+			} else if (CloseTo(w, floor(sw / 3.0))) {
+				r.size.width = floor(sw * 2.0 / 3.0);
+			}		
+		}
+	} else {
+		if (CloseTo(y, screenRect.origin.y + floor((sh - h) / 2)) && CloseTo(x, sx) && CloseTo(h, sh)) {
+			if (CloseTo(h, sh)) {
+				r.size.height = floor(sh / 3.0);
+			}
+			r.origin.y = floor((sh - r.size.height) / 2);
 		}		
 	}
 	
@@ -60,17 +77,30 @@ NSRect ShiftIt_Right(NSRect screenRect, NSRect windowRect) {
 	float w = windowRect.size.width;
 	float h = windowRect.size.height;
 	float x = windowRect.origin.x;
+	float y = windowRect.origin.y;
 	float sw = screenRect.size.width;
+	float sh = screenRect.size.height;
+	float sx = screenRect.origin.x;
+	float sy = screenRect.origin.y;
 
-	if (CloseTo(windowRect.origin.y, screenRect.origin.y) && CloseTo(x, sw - w) && CloseTo(h, r.size.height)) {
-		if (CloseTo(w, sw / 2)) {
-			r.size.width = floor(sw / 3.0);
-		} else if (CloseTo(w, floor(sw / 3.0))) {
-			r.size.width = floor(sw * 2.0 / 3.0);
+	if (Wide(screenRect)) {
+		if (CloseTo(y, sy) && CloseTo(x, sx + sw - w) && CloseTo(h, sh)) {
+			if (CloseTo(w, sw / 2)) {
+				r.size.width = floor(sw / 3.0);
+			} else if (CloseTo(w, floor(sw / 3.0))) {
+				r.size.width = floor(sw * 2.0 / 3.0);
+			}
 		}
+	} else {
+		if (CloseTo(y, sy + floor((sh - h) / 2)) && CloseTo(x, sx + sw - w) && CloseTo(h, sh)) {
+			if (CloseTo(h, sh)) {
+				r.size.height = floor(sh / 3.0);
+			}
+			r.origin.y = floor((sh - r.size.height) / 2);
+		}				
 	}
 	
-	r.origin.x = screenRect.size.width - r.size.width;
+	r.origin.x = sw - r.size.width;
 
 	return r;
 }
@@ -79,6 +109,7 @@ NSRect ShiftIt_Top(NSRect screenRect, NSRect windowRect) {
 	NSRect r;
 	
 	r.origin.y = 0;
+	r.origin.x = 0;
 	
 	r.size.width = screenRect.size.width;
 	r.size.height = screenRect.size.height / 2;
@@ -86,15 +117,28 @@ NSRect ShiftIt_Top(NSRect screenRect, NSRect windowRect) {
 	float w = windowRect.size.width;
 	float h = windowRect.size.height;
 	float x = windowRect.origin.x;
+	float y = windowRect.origin.y;
 	float sw = screenRect.size.width;
+	float sh = screenRect.size.height;
+	float sx = screenRect.origin.x;
+	float sy = screenRect.origin.y;
 	
-	if (CloseTo(windowRect.origin.y, screenRect.origin.y) && CloseTo(x, floor((sw - w) / 2)) && CloseTo(h, r.size.height)) {
-		if (CloseTo(w, screenRect.size.width)) {
-			r.size.width = floor(screenRect.size.width / 3.0);
+	if (Wide(screenRect)) {
+		if (CloseTo(y, sy) && CloseTo(x, sx + floor((sw - w) / 2)) && CloseTo(h, sh / 2)) {
+			if (CloseTo(w, sw)) {
+				r.size.width = floor(sw / 3.0);
+			}
 		}
+		r.origin.x = floor((sw - r.size.width) / 2);
+	} else {
+		if (CloseTo(y, sy) && CloseTo(x, sx) && CloseTo(w, sw)) {
+			if (CloseTo(h, sh / 2)) {
+				r.size.height = floor(sh / 3.0);
+			} else if (CloseTo(h, floor(sh / 3.0))) {
+				r.size.height = floor(sh * 2.0 / 3.0);
+			}		
+		}		
 	}
-	
-	r.origin.x = floor((screenRect.size.width - r.size.width) / 2);
 	
 	return r;
 }
@@ -103,22 +147,37 @@ NSRect ShiftIt_Bottom(NSRect screenRect, NSRect windowRect) {
 	NSRect r;
 	
 	r.origin.y = screenRect.size.height / 2;
+	r.origin.x = 0;
 	
 	r.size.width = screenRect.size.width;
 	r.size.height = screenRect.size.height / 2;
-
+	
 	float w = windowRect.size.width;
 	float h = windowRect.size.height;
 	float x = windowRect.origin.x;
+	float y = windowRect.origin.y;
 	float sw = screenRect.size.width;
+	float sh = screenRect.size.height;
+	float sx = screenRect.origin.x;
+	float sy = screenRect.origin.y;	
 	
-	if (CloseTo(windowRect.origin.y, screenRect.origin.y + screenRect.size.height / 2) && CloseTo(x, floor((sw - w) / 2)) && CloseTo(h, r.size.height)) {
-		if (CloseTo(w,screenRect.size.width)) {
-			r.size.width = floor(screenRect.size.width / 3.0);
+	if (Wide(screenRect)) {
+		if (CloseTo(y, sy + sh / 2) && CloseTo(x, sx + floor((sw - w) / 2)) && CloseTo(h, sh / 2)) {
+			if (CloseTo(w,sw)) {
+				r.size.width = floor(sw / 3.0);
+			}
 		}
+		r.origin.x = floor((sw - r.size.width) / 2);
+	} else {
+		if (CloseTo(y, sy + sh - h) && CloseTo(x, sx) && CloseTo(w, sw)) {
+			if (CloseTo(h, sh / 2)) {
+				r.size.height = floor(sh / 3.0);
+			} else if (CloseTo(h, floor(sh / 3.0))) {
+				r.size.height = floor(sh * 2.0 / 3.0);
+			}		
+		}
+		r.origin.y = sh - r.size.height;
 	}
-	
-	r.origin.x = floor((screenRect.size.width - r.size.width) / 2);
 	
 	return r;
 }
@@ -135,16 +194,29 @@ NSRect ShiftIt_TopLeft(NSRect screenRect, NSRect windowRect) {
 	float w = windowRect.size.width;
 	float h = windowRect.size.height;
 	float x = windowRect.origin.x;
+	float y = windowRect.origin.y;
 	float sw = screenRect.size.width;
+	float sh = screenRect.size.height;
+	float sx = screenRect.origin.x;
+	float sy = screenRect.origin.y;
 	
-	if (CloseTo(windowRect.origin.y, screenRect.origin.y) && CloseTo(x, 0) && CloseTo(h, r.size.height)) {
-		if (CloseTo(w, sw/2)) {
-			r.size.width = floor(sw / 3.0);
-		} else if (CloseTo(w, floor(sw / 3.0))) {
-			r.size.width = floor(sw * 2.0 / 3.0);
+	if (Wide(screenRect)) {
+		if (CloseTo(y, sy) && CloseTo(x, sx) && CloseTo(h, sh / 2)) {
+			if (CloseTo(w, sw/2)) {
+				r.size.width = floor(sw / 3.0);
+			} else if (CloseTo(w, floor(sw / 3.0))) {
+				r.size.width = floor(sw * 2.0 / 3.0);
+			}
+		}
+	} else {
+		if (CloseTo(y, sy) && CloseTo(x, sx) && CloseTo(w, sw / 2)) {
+			if (CloseTo(h, sh/2)) {
+				r.size.height = floor(sh / 3.0);
+			} else if (CloseTo(h, floor(sh / 3.0))) {
+				r.size.height = floor(sh * 2.0 / 3.0);
+			}			
 		}
 	}
-	
 	
 	return r;
 }
@@ -160,17 +232,31 @@ NSRect ShiftIt_TopRight(NSRect screenRect, NSRect windowRect) {
 	float w = windowRect.size.width;
 	float h = windowRect.size.height;
 	float x = windowRect.origin.x;
+	float y = windowRect.origin.y;
 	float sw = screenRect.size.width;
+	float sh = screenRect.size.height;
+	float sx = screenRect.origin.x;
+	float sy = screenRect.origin.y;
 	
-	if (CloseTo(windowRect.origin.y, screenRect.origin.y) && CloseTo(x, sw - w) && CloseTo(h, r.size.height)) {
-		if (CloseTo(w, sw / 2)) {
-			r.size.width = floor(sw / 3.0);
-		} else if (CloseTo(w, floor(sw / 3.0))) {
-			r.size.width = floor(sw * 2.0 / 3.0);
+	if (Wide(screenRect)) {
+		if (CloseTo(y, sy) && CloseTo(x, sx + sw - w) && CloseTo(h, sh/2)) {
+			if (CloseTo(w, sw / 2)) {
+				r.size.width = floor(sw / 3.0);
+			} else if (CloseTo(w, floor(sw / 3.0))) {
+				r.size.width = floor(sw * 2.0 / 3.0);
+			}
+		}
+	} else {		
+		if (CloseTo(y, sy) && CloseTo(x, sx + sw - w) && CloseTo(w, sw/2)) {
+			if (CloseTo(h, sh / 2)) {
+				r.size.height = floor(sh / 3.0);
+			} else if (CloseTo(h, floor(sh / 3.0))) {
+				r.size.height = floor(sh * 2.0 / 3.0);
+			}
 		}
 	}
-	
-	r.origin.x = screenRect.size.width - r.size.width;	
+
+	r.origin.x = sw - r.size.width;	
 	
 	return r;
 }
@@ -179,7 +265,6 @@ NSRect ShiftIt_BottomLeft(NSRect screenRect, NSRect windowRect) {
 	NSRect r;
 	
 	r.origin.x = 0;
-	r.origin.y = screenRect.size.height / 2;
 	
 	r.size.width = screenRect.size.width / 2;
 	r.size.height = screenRect.size.height / 2;
@@ -187,15 +272,31 @@ NSRect ShiftIt_BottomLeft(NSRect screenRect, NSRect windowRect) {
 	float w = windowRect.size.width;
 	float h = windowRect.size.height;
 	float x = windowRect.origin.x;
+	float y = windowRect.origin.y;
 	float sw = screenRect.size.width;
+	float sh = screenRect.size.height;
+	float sx = screenRect.origin.x;
+	float sy = screenRect.origin.y;
 	
-	if (CloseTo(windowRect.origin.y, screenRect.origin.y + screenRect.size.height / 2) && CloseTo(x, 0) && CloseTo(h, r.size.height)) {
-		if (CloseTo(w, sw / 2)) {
-			r.size.width = floor(sw / 3.0);
-		} else if (CloseTo(w, floor(sw / 3.0))) {
-			r.size.width = floor(sw * 2.0 / 3.0);
+	if (Wide(screenRect)) {
+		if (CloseTo(y, sy + sh - h) && CloseTo(x, sx) && CloseTo(h, sh / 2)) {
+			if (CloseTo(w, sw / 2)) {
+				r.size.width = floor(sw / 3.0);
+			} else if (CloseTo(w, floor(sw / 3.0))) {
+				r.size.width = floor(sw * 2.0 / 3.0);
+			}
 		}
+	} else {
+		if (CloseTo(y, sy + sh - h) && CloseTo(x, sx) && CloseTo(w, sw / 2)) {
+			if (CloseTo(h, sh / 2)) {
+				r.size.height = floor(sh / 3.0);
+			} else if (CloseTo(h, floor(sh / 3.0))) {
+				r.size.height = floor(sh * 2.0 / 3.0);
+			}
+		}		
 	}
+	
+	r.origin.y = sh - r.size.height;
 	
 	return r;
 }
@@ -211,17 +312,32 @@ NSRect ShiftIt_BottomRight(NSRect screenRect, NSRect windowRect) {
 	float w = windowRect.size.width;
 	float h = windowRect.size.height;
 	float x = windowRect.origin.x;
+	float y = windowRect.origin.y;
 	float sw = screenRect.size.width;
+	float sh = screenRect.size.height;
+	float sx = screenRect.origin.x;
+	float sy = screenRect.origin.y;
 	
-	if (CloseTo(windowRect.origin.y, screenRect.origin.y + screenRect.size.height / 2) && CloseTo(x, sw - w) && CloseTo(h, r.size.height)) {
-		if (CloseTo(w, sw / 2)) {
-			r.size.width = floor(sw / 3.0);
-		} else if (CloseTo(w, floor(sw / 3.0))) {
-			r.size.width = floor(sw * 2.0 / 3.0);
+	if (Wide(screenRect)) {
+		if (CloseTo(y, sy + sh - h) && CloseTo(x, sx + sw - w) && CloseTo(h, sh / 2)) {
+			if (CloseTo(w, sw / 2)) {
+				r.size.width = floor(sw / 3.0);
+			} else if (CloseTo(w, floor(sw / 3.0))) {
+				r.size.width = floor(sw * 2.0 / 3.0);
+			}
 		}
+	} else {
+		if (CloseTo(y, sy + sh - h) && CloseTo(x, sx + sw - w) && CloseTo(w, sw / 2)) {
+			if (CloseTo(h, sh / 2)) {
+				r.size.height = floor(sh / 3.0);
+			} else if (CloseTo(h, floor(sh / 3.0))) {
+				r.size.height = floor(sh * 2.0 / 3.0);
+			}
+		}		
 	}
 	
-	r.origin.x = screenRect.size.width - r.size.width;	
+	r.origin.x = sw - r.size.width;	
+	r.origin.y = sh - r.size.height;
 	
 	return r;
 }

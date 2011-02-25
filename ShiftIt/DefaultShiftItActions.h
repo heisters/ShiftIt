@@ -20,6 +20,7 @@
 #import <Foundation/Foundation.h>
 
 BOOL CloseTo(float a, float b);
+BOOL Wide(NSRect screenRect);
 
 NSRect ShiftIt_Left(NSRect screenRect, NSRect windowRect);
 NSRect ShiftIt_Right(NSRect screenRect, NSRect windowRect);
